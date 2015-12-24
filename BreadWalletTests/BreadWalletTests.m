@@ -34,9 +34,11 @@
 #import "BRMerkleBlock.h"
 #import "BRPaymentRequest.h"
 #import "BRPaymentProtocol.h"
+#import "BRTxMetadataEntity.h"
 #import "NSData+Bitcoin.h"
 #import "NSMutableData+Bitcoin.h"
 #import "NSString+Bitcoin.h"
+#import "NSManagedObject+Sugar.h"
 
 //#define SKIP_BIP38 1
 
@@ -1453,6 +1455,18 @@
 - (void)testUIImageUtils
 {
     
+}
+
+#pragma mark - core data migration simulation
+#pargma warning - remove this after testing
+- (void)testCoreDataMigration {
+    // after doing a full sync of a large mining wallet, run this test to put core data in a simulated v0.5.2 state
+    // then kill the app and launch normaly to test v0.5.3 core data migration
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"HAS_AUTHENTICATED"];
+
+    [BRTxMetadataEntity deleteObjects:[BRTxMetadataEntity allObjects]];
+    [BRTxMetadataEntity saveContext];
 }
 
 #pragma mark - performance
