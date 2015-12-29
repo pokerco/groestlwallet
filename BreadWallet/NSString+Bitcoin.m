@@ -38,11 +38,11 @@ static const UniChar base58chars[] = {
 + (NSString *)base58WithData:(NSData *)d
 {
     if (! d) return nil;
-    
+
     size_t i, z = 0;
-    
+
     while (z < d.length && ((const uint8_t *)d.bytes)[z] == 0) z++; // count leading zeroes
-    
+
     uint8_t buf[(d.length - z)*138/100 + 1]; // log(256)/log(58), rounded up
 
     memset(buf, 0, sizeof(buf));
@@ -55,7 +55,7 @@ static const UniChar base58chars[] = {
             buf[j - 1] = carry % 58;
             carry /= 58;
         }
-        
+
         memset(&carry, 0, sizeof(carry));
     }
 
@@ -63,7 +63,7 @@ static const UniChar base58chars[] = {
     while (i < sizeof(buf) && buf[i] == 0) i++; // skip leading zeroes
 
     CFMutableStringRef s = CFStringCreateMutable(SecureAllocator(), z + sizeof(buf) - i);
-    
+
     while (z-- > 0) CFStringAppendCharacters(s, &base58chars[0], 1);
     while (i < sizeof(buf)) CFStringAppendCharacters(s, &base58chars[buf[i++]], 1);
     memset(buf, 0, sizeof(buf));
@@ -73,24 +73,24 @@ static const UniChar base58chars[] = {
 + (NSString *)base58checkWithData:(NSData *)d
 {
     if (! d) return nil;
-    
+
     NSMutableData *data = [NSMutableData secureDataWithData:d];
 
-    [data appendBytes:d.SHA256_2.u32 length:4];
+    [data appendBytes:d.HashGroestl_2.u32 length:4];
     return [self base58WithData:data];
 }
 
 + (NSString *)hexWithData:(NSData *)d
 {
     if (! d) return nil;
-    
+
     const uint8_t *bytes = d.bytes;
     NSMutableString *hex = CFBridgingRelease(CFStringCreateMutable(SecureAllocator(), d.length*2));
-    
+
     for (NSUInteger i = 0; i < d.length; i++) {
         [hex appendFormat:@"%02x", bytes[i]];
     }
-    
+
     return hex;
 }
 
@@ -168,20 +168,20 @@ static const UniChar base58chars[] = {
         return nil;
     }
     else return nil; // unknown script type
-    
+
     return [self base58checkWithData:d];
 }
 
 - (NSData *)base58ToData
 {
     size_t i, z = 0;
-    
+
     while (z < self.length && [self characterAtIndex:z] == base58chars[0]) z++; // count leading zeroes
-    
+
     uint8_t buf[(self.length - z)*733/1000 + 1]; // log(58)/log(256), rounded up
-    
+
     memset(buf, 0, sizeof(buf));
-    
+
     for (i = z; i < self.length; i++) {
         uint32_t carry = [self characterAtIndex:i];
 
@@ -216,18 +216,18 @@ static const UniChar base58chars[] = {
             default:
                 carry = UINT32_MAX;
         }
-        
+
         if (carry >= 58) break; // invalid base58 digit
-        
+
         for (size_t j = sizeof(buf); j > 0; j--) {
             carry += (uint32_t)buf[j - 1]*58;
             buf[j - 1] = carry & 0xff;
             carry >>= 8;
         }
-        
+
         memset(&carry, 0, sizeof(carry));
     }
-    
+
     i = 0;
     while (i < sizeof(buf) && buf[i] == 0) i++; // skip leading zeroes
 
@@ -242,26 +242,26 @@ static const UniChar base58chars[] = {
 - (NSData *)base58checkToData
 {
     NSData *d = self.base58ToData;
-    
+
     if (d.length < 4) return nil;
 
     NSData *data = CFBridgingRelease(CFDataCreate(SecureAllocator(), d.bytes, d.length - 4));
 
     // verify checksum
-    if (*(uint32_t *)((const uint8_t *)d.bytes + d.length - 4) != data.SHA256_2.u32[0]) return nil;
+    if (*(uint32_t *)((const uint8_t *)d.bytes + d.length - 4) != data.HashGroestl_2.u32[0]) return nil;
     return data;
 }
 
 - (NSData *)hexToData
 {
     if (self.length % 2) return nil;
-    
+
     NSMutableData *d = [NSMutableData secureDataWithCapacity:self.length/2];
     uint8_t b = 0;
-    
+
     for (NSUInteger i = 0; i < self.length; i++) {
         unichar c = [self characterAtIndex:i];
-        
+
         switch (c) {
             case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
                 b += c - '0';
@@ -278,16 +278,16 @@ static const UniChar base58chars[] = {
             default:
                 return d;
         }
-        
+
         memset(&c, 0, sizeof(c));
-        
+
         if (i % 2) {
             [d appendBytes:&b length:1];
             memset(&b, 0, sizeof(b));
         }
         else b *= 16;
     }
-    
+
     return d;
 }
 
@@ -301,11 +301,11 @@ static const UniChar base58chars[] = {
 - (BOOL)isValidBitcoinAddress
 {
     NSData *d = self.base58checkToData;
-    
+
     if (d.length != 21) return NO;
-    
+
     uint8_t version = *(const uint8_t *)d.bytes;
-        
+
 #if BITCOIN_TESTNET
     return (version == BITCOIN_PUBKEY_ADDRESS_TEST || version == BITCOIN_SCRIPT_ADDRESS_TEST) ? YES : NO;
 #endif
@@ -316,7 +316,7 @@ static const UniChar base58chars[] = {
 - (BOOL)isValidBitcoinPrivateKey
 {
     NSData *d = self.base58checkToData;
-    
+
     if (d.length == 33 || d.length == 34) { // wallet import format: https://en.bitcoin.it/wiki/Wallet_import_format
 #if BITCOIN_TESTNET
         return (*(const uint8_t *)d.bytes == BITCOIN_PRIVKEY_TEST) ? YES : NO;

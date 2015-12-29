@@ -30,7 +30,7 @@
 static void *secureAllocate(CFIndex allocSize, CFOptionFlags hint, void *info)
 {
     void *ptr = malloc(sizeof(CFIndex) + allocSize);
-    
+
     if (ptr) { // we need to keep track of the size of the allocation so it can be cleansed before deallocation
         *(CFIndex *)ptr = allocSize;
         return (CFIndex *)ptr + 1;
@@ -41,7 +41,7 @@ static void *secureAllocate(CFIndex allocSize, CFOptionFlags hint, void *info)
 static void secureDeallocate(void *ptr, void *info)
 {
     CFIndex size = *((CFIndex *)ptr - 1);
-    
+
     if (size) {
         memset(ptr, 0, size);
         free((CFIndex *)ptr - 1);
@@ -54,12 +54,12 @@ static void *secureReallocate(void *ptr, CFIndex newsize, CFOptionFlags hint, vo
     // than the old size, so just cleanse and deallocate every time.
     void *newptr = secureAllocate(newsize, hint, info);
     CFIndex size = *((CFIndex *)ptr - 1);
-    
+
     if (newptr && size) {
         memcpy(newptr, ptr, (size < newsize) ? size : newsize);
         secureDeallocate(ptr, info);
     }
-    
+
     return newptr;
 }
 
@@ -68,19 +68,19 @@ CFAllocatorRef SecureAllocator()
 {
     static CFAllocatorRef alloc = NULL;
     static dispatch_once_t onceToken = 0;
-    
+
     dispatch_once(&onceToken, ^{
         CFAllocatorContext context;
-        
+
         context.version = 0;
         CFAllocatorGetContext(kCFAllocatorDefault, &context);
         context.allocate = secureAllocate;
         context.reallocate = secureReallocate;
         context.deallocate = secureDeallocate;
-        
+
         alloc = CFAllocatorCreate(kCFAllocatorDefault, &context);
     });
-    
+
     return alloc;
 }
 
@@ -144,27 +144,27 @@ CFAllocatorRef SecureAllocator()
 {
     if (i < VAR_INT16_HEADER) {
         uint8_t payload = (uint8_t)i;
-        
+
         [self appendBytes:&payload length:sizeof(payload)];
     }
     else if (i <= UINT16_MAX) {
         uint8_t header = VAR_INT16_HEADER;
         uint16_t payload = CFSwapInt16HostToLittle((uint16_t)i);
-        
+
         [self appendBytes:&header length:sizeof(header)];
         [self appendBytes:&payload length:sizeof(payload)];
     }
     else if (i <= UINT32_MAX) {
         uint8_t header = VAR_INT32_HEADER;
         uint32_t payload = CFSwapInt32HostToLittle((uint32_t)i);
-        
+
         [self appendBytes:&header length:sizeof(header)];
         [self appendBytes:&payload length:sizeof(payload)];
     }
     else {
         uint8_t header = VAR_INT64_HEADER;
         uint64_t payload = CFSwapInt64HostToLittle(i);
-        
+
         [self appendBytes:&header length:sizeof(header)];
         [self appendBytes:&payload length:sizeof(payload)];
     }
@@ -240,7 +240,7 @@ CFAllocatorRef SecureAllocator()
     [self appendUInt32:BITCOIN_MAGIC_NUMBER];
     [self appendNullPaddedString:type length:12];
     [self appendUInt32:(uint32_t)message.length];
-    [self appendBytes:message.SHA256_2.u32 length:4];
+    [self appendBytes:message.HashGroestl_2.u32 length:4];
     [self appendBytes:message.bytes length:message.length];
 }
 
@@ -259,7 +259,7 @@ CFAllocatorRef SecureAllocator()
 {
     address = CFSwapInt32HostToBig(address);
     port = CFSwapInt16HostToBig(port);
-    
+
     [self appendUInt64:services];
     [self appendBytes:"\0\0\0\0\0\0\0\0\0\0\xFF\xFF" length:12]; // IPv4 mapped IPv6 header
     [self appendBytes:&address length:sizeof(address)];

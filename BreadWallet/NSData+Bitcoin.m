@@ -24,6 +24,7 @@
 //  THE SOFTWARE.
 
 #import "NSData+Bitcoin.h"
+#import "sph_groestl.h"
 
 // bitwise left rotation
 #define rol32(a, b) (((a) << (b)) | ((a) >> (32 - (b))))
@@ -40,7 +41,7 @@ static void SHA1Compress(uint32_t *r, uint32_t *x)
 {
     size_t i = 0;
     uint32_t a = r[0], b = r[1], c = r[2], d = r[3], e = r[4], t;
-    
+
     for (; i < 16; i++) sha1(f1(b, c, d), 0x5a827999, (x[i] = CFSwapInt32BigToHost(x[i])));
     for (; i < 20; i++) sha1(f1(b, c, d), 0x5a827999, (x[i] = rol32(x[i - 3] ^ x[i - 8] ^ x[i - 14] ^ x[i - 16], 1)));
     for (; i < 40; i++) sha1(f2(b, c, d), 0x6ed9eba1, (x[i] = rol32(x[i - 3] ^ x[i - 8] ^ x[i - 14] ^ x[i - 16], 1)));
@@ -54,13 +55,13 @@ void SHA1(void *md, const void *data, size_t len)
 {
     size_t i;
     uint32_t x[80], buf[] = { 0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0 }; // initial buffer values
-    
+
     for (i = 0; i < len; i += 64) { // process data in 64 byte blocks
         memcpy(x, (const uint8_t *)data + i, (i + 64 < len) ? 64 : len - i);
         if (i + 64 > len) break;
         SHA1Compress(buf, x);
     }
-    
+
     memset((uint8_t *)x + (len - i), 0, 64 - (len - i)); // clear remainder of x
     ((uint8_t *)x)[len - i] = 0x80; // append padding
     if (len - i >= 56) SHA1Compress(buf, x), memset(x, 0, 64); // length goes to next block
@@ -94,19 +95,19 @@ static void SHA256Compress(uint32_t *r, uint32_t *x)
         0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
         0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
     };
-    
+
     size_t i;
     uint32_t a = r[0], b = r[1], c = r[2], d = r[3], e = r[4], f = r[5], g = r[6], h = r[7], t1, t2, w[64];
-    
+
     for (i = 0; i < 16; i++) w[i] = CFSwapInt32BigToHost(x[i]);
     for (; i < 64; i++) w[i] = s3(w[i - 2]) + w[i - 7] + s2(w[i - 15]) + w[i - 16];
-    
+
     for (i = 0; i < 64; i++) {
         t1 = h + s1(e) + ch(e, f, g) + k[i] + w[i];
         t2 = s0(a) + maj(a, b, c);
         h = g, g = f, f = e, e = d + t1, d = c, c = b, b = a, a = t1 + t2;
     }
-    
+
     r[0] += a, r[1] += b, r[2] += c, r[3] += d, r[4] += e, r[5] += f, r[6] += g, r[7] += h;
 }
 
@@ -115,7 +116,7 @@ void SHA256(void *md, const void *data, size_t len)
     size_t i;
     uint32_t x[16], buf[] = { 0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
                               0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19 }; // initial buffer values
-    
+
     for (i = 0; i < len; i += 64) { // process data in 64 byte blocks
         memcpy(x, (const uint8_t *)data + i, (i + 64 < len) ? 64 : len - i);
         if (i + 64 > len) break;
@@ -159,19 +160,19 @@ static void SHA512Compress(uint64_t *r, uint64_t *x)
         0x113f9804bef90dae, 0x1b710b35131c471b, 0x28db77f523047d84, 0x32caab7b40c72493, 0x3c9ebe0a15c9bebc,
         0x431d67c49c100d4c, 0x4cc5d4becb3e42b6, 0x597f299cfc657e2a, 0x5fcb6fab3ad6faec, 0x6c44198c4a475817
     };
-    
+
     size_t i;
     uint64_t a = r[0], b = r[1], c = r[2], d = r[3], e = r[4], f = r[5], g = r[6], h = r[7], t1, t2, w[80];
-    
+
     for (i = 0; i < 16; i++) w[i] = CFSwapInt64BigToHost(x[i]);
     for (; i < 80; i++) w[i] = S3(w[i - 2]) + w[i - 7] + S2(w[i - 15]) + w[i - 16];
-    
+
     for (i = 0; i < 80; i++) {
         t1 = h + S1(e) + ch(e, f, g) + k[i] + w[i];
         t2 = S0(a) + maj(a, b, c);
         h = g, g = f, f = e, e = d + t1, d = c, c = b, b = a, a = t1 + t2;
     }
-    
+
     r[0] += a, r[1] += b, r[2] += c, r[3] += d, r[4] += e, r[5] += f, r[6] += g, r[7] += h;
 }
 
@@ -180,13 +181,13 @@ void SHA512(void *md, const void *data, size_t len)
     size_t i;
     uint64_t x[16], buf[] = { 0x6a09e667f3bcc908, 0xbb67ae8584caa73b, 0x3c6ef372fe94f82b, 0xa54ff53a5f1d36f1,
                               0x510e527fade682d1, 0x9b05688c2b3e6c1f, 0x1f83d9abfb41bd6b, 0x5be0cd19137e2179 };
-    
+
     for (i = 0; i < len; i += 128) { // process data in 128 byte blocks
         memcpy(x, (const uint8_t *)data + i, (i + 128 < len) ? 128 : len - i);
         if (i + 128 > len) break;
         SHA512Compress(buf, x);
     }
-    
+
     memset((uint8_t *)x + (len - i), 0, 128 - (len - i)); // clear remainder of x
     ((uint8_t *)x)[len - i] = 0x80; // append padding
     if (len - i >= 112) SHA512Compress(buf, x), memset(x, 0, 128); // length goes to next block
@@ -246,7 +247,7 @@ static void RMDcompress(uint32_t *r, uint32_t *x)
     for (i = 0; i < 16; i++) rmd(t, g(br, cr, dr), x[rr4[i]], 0x7a6d76e9, sr4[i], ar, er, dr, cr, br); // round 4 right
     for (i = 0; i < 16; i++) rmd(t, j(bl, cl, dl), x[rl5[i]], 0xa953fd4e, sl5[i], al, el, dl, cl, bl); // round 5 left
     for (i = 0; i < 16; i++) rmd(t, f(br, cr, dr), x[rr5[i]], 0x00000000, sr5[i], ar, er, dr, cr, br); // round 5 right
-    
+
     t = r[1] + cl + dr; // final result for r[0]
     r[1] = r[2] + dl + er, r[2] = r[3] + el + ar, r[3] = r[4] + al + br, r[4] = r[0] + bl + cr, r[0] = t; // combine
 }
@@ -256,13 +257,13 @@ void RMD160(void *md, const void *data, size_t len)
 {
     size_t i;
     uint32_t x[16], buf[] = { 0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0 }; // initial buffer values
-    
+
     for (i = 0; i <= len; i += 64) { // process data in 64 byte blocks
         memcpy(x, (const uint8_t *)data + i, (i + 64 < len) ? 64 : len - i);
         if (i + 64 > len) break;
         RMDcompress(buf, x);
     }
-    
+
     memset((uint8_t *)x + (len - i), 0, 64 - (len - i)); // clear remainder of x
     ((uint8_t *)x)[len - i] = 0x80; // append padding
     if (len - i >= 56) RMDcompress(buf, x), memset(x, 0, 64); // length goes to next block
@@ -279,7 +280,7 @@ void HMAC(void *md, void (*hash)(void *, const void *, size_t), size_t hlen, con
 {
     size_t blen = (hlen > 32) ? 128 : 64;
     uint8_t k[hlen], kipad[blen + dlen], kopad[blen + hlen];
-    
+
     if (klen > blen) hash(k, key, klen), key = k, klen = sizeof(k);
     memset(kipad, 0, blen);
     memcpy(kipad, key, klen);
@@ -290,7 +291,7 @@ void HMAC(void *md, void (*hash)(void *, const void *, size_t), size_t hlen, con
     memcpy(kipad + blen, data, dlen);
     hash(kopad + blen, kipad, sizeof(kipad));
     hash(md, kopad, sizeof(kopad));
-    
+
     memset(k, 0, sizeof(k));
     memset(kipad, 0, blen);
     memset(kopad, 0, blen);
@@ -307,9 +308,9 @@ void PBKDF2(void *dk, size_t dklen, void (*hash)(void *, const void *, size_t), 
 {
     uint8_t s[slen + sizeof(unsigned)], U[hlen], T[hlen];
     uint32_t i, j;
-    
+
     memcpy(s, salt, slen);
-    
+
     for (i = 0; i < (dklen + hlen - 1)/hlen; i++) {
         *(uint32_t *)(s + slen) = CFSwapInt32HostToBig(i + 1);
         HMAC(U, hash, hlen, pw, pwlen, s, sizeof(s)); // U1 = hmac_hash(pw, salt || INT32_BE(i))
@@ -323,7 +324,7 @@ void PBKDF2(void *dk, size_t dklen, void (*hash)(void *, const void *, size_t), 
         // dk = T1 || T2 || ... || Tdklen/hlen
         memcpy((uint8_t *)dk + i*hlen, T, (i*hlen + hlen <= dklen) ? hlen : dklen % hlen);
     }
-    
+
     memset(s, 0, sizeof(s));
     memset(U, 0, sizeof(U));
     memset(T, 0, sizeof(T));
@@ -342,7 +343,7 @@ void PBKDF2(void *dk, size_t dklen, void (*hash)(void *, const void *, size_t), 
 - (UInt256)SHA256
 {
     UInt256 sha256;
-    
+
     SHA256(&sha256, self.bytes, self.length);
     return sha256;
 }
@@ -350,7 +351,7 @@ void PBKDF2(void *dk, size_t dklen, void (*hash)(void *, const void *, size_t), 
 - (UInt256)SHA256_2
 {
     UInt256 sha256;
-    
+
     SHA256(&sha256, self.bytes, self.length);
     SHA256(&sha256, &sha256, sizeof(sha256));
     return sha256;
@@ -359,7 +360,7 @@ void PBKDF2(void *dk, size_t dklen, void (*hash)(void *, const void *, size_t), 
 - (UInt512)SHA512
 {
     UInt512 sha512;
-    
+
     SHA512(&sha512, self.bytes, self.length);
     return sha512;
 }
@@ -367,7 +368,7 @@ void PBKDF2(void *dk, size_t dklen, void (*hash)(void *, const void *, size_t), 
 - (UInt160)RMD160
 {
     UInt160 rmd160;
-    
+
     RMD160(&rmd160, self.bytes, (size_t)self.length);
     return rmd160;
 }
@@ -376,7 +377,7 @@ void PBKDF2(void *dk, size_t dklen, void (*hash)(void *, const void *, size_t), 
 {
     UInt256 sha256;
     UInt160 rmd160;
-    
+
     SHA256(&sha256, self.bytes, self.length);
     RMD160(&rmd160, &sha256, sizeof(sha256));
     return rmd160;
@@ -388,12 +389,28 @@ void PBKDF2(void *dk, size_t dklen, void (*hash)(void *, const void *, size_t), 
     NSMutableData *d = [NSMutableData dataWithLength:len];
     uint8_t *b1 = d.mutableBytes;
     const uint8_t *b2 = self.bytes;
-    
+
     for (NSUInteger i = 0; i < len; i++) {
         b1[i] = b2[len - i - 1];
     }
-    
+
     return d;
+}
+
+- (NSData *)HashGroestl_2
+{
+    NSMutableData *d = [NSMutableData dataWithLength:64];
+    sph_groestl512_context ctx_gr[2];
+
+    sph_groestl512_init(&ctx_gr[0]);
+    sph_groestl512 (&ctx_gr[0], self.bytes, self.length);
+    sph_groestl512_close(&ctx_gr[0], d.mutableBytes);
+
+    sph_groestl512_init(&ctx_gr[1]);
+    sph_groestl512(&ctx_gr[1], d.bytes, d.length);
+    sph_groestl512_close(&ctx_gr[1], d.mutableBytes);
+
+    return [d subdataWithRange:NSMakeRange(0, 32)];
 }
 
 - (uint8_t)UInt8AtOffset:(NSUInteger)offset
@@ -428,15 +445,15 @@ void PBKDF2(void *dk, size_t dklen, void (*hash)(void *, const void *, size_t), 
         case VAR_INT16_HEADER:
             if (length) *length = sizeof(h) + sizeof(uint16_t);
             return [self UInt16AtOffset:offset + 1];
-            
+
         case VAR_INT32_HEADER:
             if (length) *length = sizeof(h) + sizeof(uint32_t);
             return [self UInt32AtOffset:offset + 1];
-            
+
         case VAR_INT64_HEADER:
             if (length) *length = sizeof(h) + sizeof(uint64_t);
             return [self UInt64AtOffset:offset + 1];
-            
+
         default:
             if (length) *length = sizeof(h);
             return h;
@@ -452,7 +469,7 @@ void PBKDF2(void *dk, size_t dklen, void (*hash)(void *, const void *, size_t), 
 - (NSString *)stringAtOffset:(NSUInteger)offset length:(NSUInteger *)length
 {
     NSUInteger ll, l = (NSUInteger)[self varIntAtOffset:offset length:&ll];
-    
+
     if (length) *length = ll + l;
     if (ll == 0 || self.length < offset + ll + l) return nil;
     return [[NSString alloc] initWithBytes:(const char *)self.bytes + offset + ll length:l
@@ -462,7 +479,7 @@ void PBKDF2(void *dk, size_t dklen, void (*hash)(void *, const void *, size_t), 
 - (NSData *)dataAtOffset:(NSUInteger)offset length:(NSUInteger *)length
 {
     NSUInteger ll, l = (NSUInteger)[self varIntAtOffset:offset length:&ll];
-    
+
     if (length) *length = ll + l;
     if (ll == 0 || self.length < offset + ll + l) return nil;
     return [self subdataWithRange:NSMakeRange(offset + ll, l)];
@@ -474,14 +491,14 @@ void PBKDF2(void *dk, size_t dklen, void (*hash)(void *, const void *, size_t), 
     NSMutableArray *a = [NSMutableArray array];
     const uint8_t *b = (const uint8_t *)self.bytes;
     NSUInteger l, length = self.length;
-    
+
     for (NSUInteger i = 0; i < length; i += l) {
         if (b[i] > OP_PUSHDATA4) {
             l = 1;
             [a addObject:@(b[i])];
             continue;
         }
-        
+
         switch (b[i]) {
             case 0:
                 l = 1;
@@ -514,11 +531,11 @@ void PBKDF2(void *dk, size_t dklen, void (*hash)(void *, const void *, size_t), 
                 i++;
                 break;
         }
-        
+
         if (i + l > length) return a;
         [a addObject:[NSData dataWithBytes:&b[i] length:l]];
     }
-    
+
     return a;
 }
 
