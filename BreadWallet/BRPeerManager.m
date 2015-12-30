@@ -1024,7 +1024,7 @@ static const char *dns_seeds[] = {
 {
     if (blockHeight == TX_UNCONFIRMED) return (self.lastBlock.timestamp - NSTimeIntervalSince1970) + 1*60; //next block
 
-    if (blockHeight >= self.lastBlockHeight) { // future block, assume 10 minutes per block after last block
+    if (blockHeight >= self.lastBlockHeight) { // future block, assume 1 minutes per block after last block
         return (self.lastBlock.timestamp - NSTimeIntervalSince1970) + (blockHeight - self.lastBlockHeight)*1*60;
     }
 
