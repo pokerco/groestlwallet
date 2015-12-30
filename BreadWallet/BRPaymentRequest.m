@@ -31,7 +31,7 @@
 #define USER_AGENT [NSString stringWithFormat:@"/groestlwallet:%@/",\
                     NSBundle.mainBundle.infoDictionary[@"CFBundleShortVersionString"]]
 
-// BIP21 bitcoin URI object https://github.com/bitcoin/bips/blob/master/bip-0021.mediawiki
+// BIP21 groestlcoin URI object https://github.com/bitcoin/bips/blob/master/bip-0021.mediawiki
 @implementation BRPaymentRequest
 
 + (instancetype)requestWithString:(NSString *)string

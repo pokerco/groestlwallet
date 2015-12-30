@@ -5,7 +5,7 @@ import urllib2
 import binascii
 
 def target_int2bits(target):
-    # comprehensive explanation here: bitcoin.stackexchange.com/a/2926/2116
+    # comprehensive explanation here: groestlcoin.stackexchange.com/a/2926/2116
 
     # get in base 256 as a hex string
     target_hex = int2hex(target)

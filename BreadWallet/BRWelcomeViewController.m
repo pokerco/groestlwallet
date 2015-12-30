@@ -50,12 +50,12 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-        
+
     self.navigationController.delegate = self;
 
     self.newwalletButton.titleLabel.adjustsFontSizeToFitWidth = YES;
     self.recoverButton.titleLabel.adjustsFontSizeToFitWidth = YES;
-    
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     self.newwalletButton.titleLabel.adjustsLetterSpacingToFitWidth = YES;
@@ -67,7 +67,7 @@
         queue:nil usingBlock:^(NSNotification *note) {
             [self animateWallpaper];
         }];
-    
+
     self.backgroundObserver =
         [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidEnterBackgroundNotification object:nil
         queue:nil usingBlock:^(NSNotification *note) {
@@ -88,7 +88,7 @@
     [super viewWillAppear:animated];
 
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:animated];
-    
+
     if (self.hasAppeared) {
         self.logoXCenter.constant = self.view.frame.size.width;
         self.navigationItem.titleView.hidden = NO;
@@ -118,7 +118,7 @@
         if (! [BRWalletManager sharedInstance].noWallet) { // sanity check
             [self.navigationController.presentingViewController dismissViewControllerAnimated:NO completion:nil];
         }
-        
+
         if (! self.hasAppeared) {
             self.hasAppeared = YES;
             self.paralaxXLeft = [NSLayoutConstraint constraintWithItem:self.navigationController.view
@@ -148,7 +148,7 @@
                 [self.navigationController.view layoutIfNeeded];
             } completion:nil];
         }
-        
+
         [self animateWallpaper];
     });
 }
@@ -181,13 +181,13 @@
 - (IBAction)start:(id)sender
 {
     [BREventManager saveEvent:@"welcome:new_wallet"];
-    
+
     UIViewController *c = [self.storyboard instantiateViewControllerWithIdentifier:@"GenerateViewController"];
-    
+
     self.generateButton = (id)[c.view viewWithTag:1];
     [self.generateButton addTarget:self action:@selector(generate:) forControlEvents:UIControlEventTouchUpInside];
     self.generateButton.titleLabel.adjustsFontSizeToFitWidth = YES;
-    
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     self.generateButton.titleLabel.adjustsLetterSpacingToFitWidth = YES;
@@ -196,30 +196,30 @@
     self.warningLabel = (id)[c.view viewWithTag:2];
     self.showButton = (id)[c.view viewWithTag:3];
     [self.showButton addTarget:self action:@selector(show:) forControlEvents:UIControlEventTouchUpInside];
-    
+
     NSTextAttachment *noEye = [NSTextAttachment new], *noKey = [NSTextAttachment new];
     NSMutableAttributedString *s = [[NSMutableAttributedString alloc]
                                     initWithAttributedString:self.warningLabel.attributedText];
-    
+
     noEye.image = [UIImage imageNamed:@"no-eye"];
     [s replaceCharactersInRange:[s.string rangeOfString:@"%no-eye%"]
      withAttributedString:[NSAttributedString attributedStringWithAttachment:noEye]];
     noKey.image = [UIImage imageNamed:@"no-key"];
     [s replaceCharactersInRange:[s.string rangeOfString:@"%no-key%"]
      withAttributedString:[NSAttributedString attributedStringWithAttachment:noKey]];
-    
+
     [s replaceCharactersInRange:[s.string rangeOfString:@"WARNING"] withString:NSLocalizedString(@"WARNING", nil)];
     [s replaceCharactersInRange:[s.string rangeOfString:@"\nDO NOT let anyone see your recovery\n"
-                                 "phrase or they can spend your bitcoins.\n"]
+                                 "phrase or they can spend your groestlcoins.\n"]
      withString:NSLocalizedString(@"\nDO NOT let anyone see your recovery\n"
-                                  "phrase or they can spend your bitcoins.\n", nil)];
+                                  "phrase or they can spend your groestlcoins.\n", nil)];
     [s replaceCharactersInRange:[s.string rangeOfString:@"\nNEVER type your recovery phrase into\n"
                                  "password managers or elsewhere.\nOther devices may be infected.\n"]
      withString:NSLocalizedString(@"\nNEVER type your recovery phrase into\npassword managers or elsewhere.\n"
                                   "Other devices may be infected.\n", nil)];
     self.warningLabel.attributedText = s;
     self.generateButton.superview.backgroundColor = [UIColor clearColor];
-    
+
     [self.navigationController pushViewController:c animated:YES];
 }
 
@@ -235,7 +235,7 @@
 - (IBAction)generate:(id)sender
 {
     [BREventManager saveEvent:@"welcome:generate"];
-    
+
     if (! [BRWalletManager sharedInstance].passcodeEnabled) {
         [BREventManager saveEvent:@"welcome:passcode_disabled"];
         [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"turn device passcode on", nil)
@@ -250,7 +250,7 @@
     self.seedNav = [self.storyboard instantiateViewControllerWithIdentifier:@"SeedNav"];
     self.warningLabel.hidden = self.showButton.hidden = NO;
     self.warningLabel.alpha = self.showButton.alpha = 0.0;
-        
+
     [UIView animateWithDuration:0.5 animations:^{
         self.warningLabel.alpha = self.showButton.alpha = 1.0;
         self.navigationController.navigationBar.topItem.titleView.alpha = 0.33*0.5;
@@ -262,7 +262,7 @@
 - (IBAction)show:(id)sender
 {
     [BREventManager saveEvent:@"welcome:show"];
-    
+
     [self.navigationController presentViewController:self.seedNav animated:YES completion:^{
         self.warningLabel.hidden = self.showButton.hidden = YES;
         self.navigationController.navigationBar.topItem.titleView.alpha = 1.0;
@@ -295,7 +295,7 @@
     [v layoutIfNeeded];
 
 //    self.paralaxXLeft.constant = self.view.frame.size.width*(to == self ? 1 : 2)*PARALAX_RATIO;
-    
+
     [UIView animateWithDuration:[self transitionDuration:transitionContext] delay:0.0 usingSpringWithDamping:0.8
     initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         to.view.center = from.view.center;

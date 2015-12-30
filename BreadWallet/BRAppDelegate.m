@@ -60,11 +60,11 @@
              userInfo:@{@"file":file}];
         }
     }
-    
+
     // start the event manager
     [[BREventManager sharedEventManager] up];
-    
-    //TODO: bitcoin protocol/payment protocol over multipeer connectivity
+
+    //TODO: groestlcoin protocol/payment protocol over multipeer connectivity
 
     //TODO: accessibility for the visually impaired
 
@@ -73,7 +73,7 @@
     //TODO: ask user if they need to sweep to a new wallet when restoring because it was compromised
 
     //TODO: figure out deterministic builds/removing app sigs: http://www.afp548.com/2012/06/05/re-signining-ios-apps/
-    
+
     //TODO: implement importing of private keys split with shamir's secret sharing:
     //      https://github.com/cetuscetus/btctool/blob/bip/bip-xxxx.mediawiki
 
@@ -92,8 +92,8 @@ shouldAllowExtensionPointIdentifier:(NSString *)extensionPointIdentifier
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication
 annotation:(id)annotation
 {
-    if (! [url.scheme isEqual:@"bitcoin"] && ! [url.scheme isEqual:@"bread"]) {
-        [[[UIAlertView alloc] initWithTitle:@"Not a bitcoin URL" message:url.absoluteString delegate:nil
+    if (! [url.scheme isEqual:@"groestlcoin"] && ! [url.scheme isEqual:@"bread"]) {
+        [[[UIAlertView alloc] initWithTitle:@"Not a groestlcoin URL" message:url.absoluteString delegate:nil
           cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         return NO;
     }
@@ -101,7 +101,7 @@ annotation:(id)annotation
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC/10), dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:BRURLNotification object:nil userInfo:@{@"url":url}];
     });
-    
+
     return YES;
 }
 
@@ -120,7 +120,7 @@ performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionH
         if (syncFailedObserver) [[NSNotificationCenter defaultCenter] removeObserver:syncFailedObserver];
         protectedObserver = balanceObserver = syncFinishedObserver = syncFailedObserver = nil;
     };
-    
+
     if ([BRPeerManager sharedInstance].syncProgress >= 1.0) {
         NSLog(@"background fetch already synced");
         if (completion) completion(UIBackgroundFetchResultNoData);
@@ -144,7 +144,7 @@ performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionH
             NSLog(@"background fetch protected data available");
             [[BRPeerManager sharedInstance] connect];
         }];
-    
+
     balanceObserver =
         [[NSNotificationCenter defaultCenter] addObserverForName:BRWalletBalanceChangedNotification object:nil queue:nil
         usingBlock:^(NSNotification *note) {
@@ -152,7 +152,7 @@ performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionH
                 [UIApplication sharedApplication].applicationIconBadgeNumber =
                     [UIApplication sharedApplication].applicationIconBadgeNumber + 1;
             }
-            
+
             balance = manager.wallet.balance;
         }];
 
@@ -171,11 +171,11 @@ performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionH
             if (completion) completion(UIBackgroundFetchResultFailed);
             cleanup();
         }];
-    
+
     NSLog(@"background fetch starting");
     [[BRPeerManager sharedInstance] connect];
     balance = manager.wallet.balance;
-    
+
     // sync events to the server
     [[BREventManager sharedEventManager] sync];
 }

@@ -342,7 +342,7 @@ size_t secp256k1_point_mul(void *r, const void *p, UInt256 i, int compressed)
     return r;
 }
 
-// Pieter Wuille's compact signature encoding used for bitcoin message signing
+// Pieter Wuille's compact signature encoding used for groestlcoin message signing
 // to verify a compact signature, recover a public key from the signature and verify that it matches the signer's pubkey
 - (NSData *)compactSign:(UInt256)md
 {

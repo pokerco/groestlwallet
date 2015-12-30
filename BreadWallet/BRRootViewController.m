@@ -40,9 +40,9 @@
 #import <sys/stat.h>
 #import <mach-o/dyld.h>
 
-#define BALANCE_TIP NSLocalizedString(@"This is your bitcoin balance. Bitcoin is a currency. "\
+#define BALANCE_TIP NSLocalizedString(@"This is your groestlcoin balance. Groestlcoin is a currency. "\
                                        "The exchange rate changes with the market.", nil)
-#define BITS_TIP    NSLocalizedString(@"%@ is for 'bits'. %@ = 1 bitcoin.", nil)
+#define GROESTL_TIP    NSLocalizedString(@"%@ is for 'groestl'. %@ = 1 groestlcoin.", nil)
 
 #define BACKUP_DIALOG_TIME_KEY @"BACKUP_DIALOG_TIME"
 #define BALANCE_KEY            @"BALANCE"
@@ -94,7 +94,7 @@
 #endif
 
     _balance = UINT64_MAX;
-    
+
     self.receiveViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"ReceiveViewController"];
     self.sendViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"SendViewController"];
     self.pageViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageViewController"];
@@ -123,17 +123,17 @@
                 if (self.navigationController.topViewController != self) {
                     [self.navigationController popToRootViewControllerAnimated:YES];
                 }
-            
+
                 if (self.navigationController.presentedViewController) {
                     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
                 }
-        
+
                 BRSendViewController *c = self.sendViewController;
-                
+
                 [self.pageViewController setViewControllers:(c ? @[c] : @[])
                 direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
                     _url = note.userInfo[@"url"];
-                    
+
                     if (self.didAppear && [UIApplication sharedApplication].protectedDataAvailable) {
                         _url = nil;
                         [c performSelector:@selector(handleURL:) withObject:note.userInfo[@"url"] afterDelay:0.0];
@@ -149,17 +149,17 @@
                 if (self.navigationController.topViewController != self) {
                     [self.navigationController popToRootViewControllerAnimated:YES];
                 }
-            
+
                 if (self.navigationController.presentedViewController) {
                     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
                 }
-                
+
                 BRSendViewController *sendController = self.sendViewController;
 
                 [self.pageViewController setViewControllers:(sendController ? @[sendController] : @[])
                 direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
                     _file = note.userInfo[@"file"];
-                    
+
                     if (self.didAppear && [UIApplication sharedApplication].protectedDataAvailable) {
                         _file = nil;
                         [sendController handleFile:note.userInfo[@"file"]];
@@ -175,7 +175,7 @@
                 BREventManager *eventMan = [BREventManager sharedEventManager];
                 UIUserNotificationType types = UIUserNotificationTypeBadge;
                                                //| UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
-            
+
                 [[BRPeerManager sharedInstance] connect];
                 [self.sendViewController updateClipboardText];
 
@@ -194,7 +194,7 @@
                 [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"WARNING", nil)
                   message:NSLocalizedString(@"DEVICE SECURITY COMPROMISED\n"
                                             "Any 'jailbreak' app can access any other app's keychain data "
-                                            "(and steal your bitcoins). "
+                                            "(and steal your groestlcoins). "
                                             "Wipe this wallet immediately and restore on a secure device.", nil)
                  delegate:self cancelButtonTitle:NSLocalizedString(@"ignore", nil)
                  otherButtonTitles:NSLocalizedString(@"wipe", nil), nil] show];
@@ -203,7 +203,7 @@
                 [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"WARNING", nil)
                   message:NSLocalizedString(@"DEVICE SECURITY COMPROMISED\n"
                                             "Any 'jailbreak' app can access any other app's keychain data "
-                                            "(and steal your bitcoins).", nil)
+                                            "(and steal your groestlcoins).", nil)
                   delegate:self cancelButtonTitle:NSLocalizedString(@"ignore", nil)
                   otherButtonTitles:NSLocalizedString(@"close app", nil), nil] show];
             }
@@ -221,7 +221,7 @@
                 [UIApplication sharedApplication].applicationIconBadgeNumber = 0; // reset app badge number
             }
         }];
-    
+
     self.activeObserver =
         [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification object:nil
         queue:nil usingBlock:^(NSNotification *note) {
@@ -234,7 +234,7 @@
         queue:nil usingBlock:^(NSNotification *note) {
             UIView *keyWindow = [UIApplication sharedApplication].keyWindow;
             UIImage *img;
-            
+
             if (! [keyWindow viewWithTag:-411]) { // only take a screenshot if no views are marked highly sensitive
                 UIGraphicsBeginImageContext([UIScreen mainScreen].bounds.size);
                 [keyWindow drawViewHierarchyInRect:[UIScreen mainScreen].bounds afterScreenUpdates:NO];
@@ -264,12 +264,12 @@
         [[NSNotificationCenter defaultCenter] addObserverForName:BRWalletBalanceChangedNotification object:nil queue:nil
         usingBlock:^(NSNotification *note) {
             double progress = [BRPeerManager sharedInstance].syncProgress;
-        
+
             if (_balance != UINT64_MAX && progress > DBL_EPSILON && progress + DBL_EPSILON < 1.0) { // wait for sync
                 self.balance = _balance; // this updates the local currency value with the latest exchange rate
                 return;
             }
-            
+
             [self showBackupDialogIfNeeded];
             [self.receiveViewController updateAddress];
             self.balance = manager.wallet.balance;
@@ -290,7 +290,7 @@
             [self hideErrorBar];
             [self startActivityWithTimeout:0];
         }];
-    
+
     self.syncFinishedObserver =
         [[NSNotificationCenter defaultCenter] addObserverForName:BRPeerManagerSyncFinishedNotification object:nil
         queue:nil usingBlock:^(NSNotification *note) {
@@ -302,7 +302,7 @@
             [self.receiveViewController updateAddress];
             self.balance = manager.wallet.balance;
         }];
-    
+
     self.syncFailedObserver =
         [[NSNotificationCenter defaultCenter] addObserverForName:BRPeerManagerSyncFailedNotification object:nil
         queue:nil usingBlock:^(NSNotification *note) {
@@ -311,10 +311,10 @@
             [self.receiveViewController updateAddress];
             [self showErrorBar];
         }];
-    
+
     self.reachability = [Reachability reachabilityForInternetConnection];
     [self.reachability startNotifier];
-    
+
     self.navigationController.delegate = self;
 
 #if BITCOIN_TESTNET
@@ -343,7 +343,7 @@
 
     if (manager.watchOnly) { // watch only wallet
         UILabel *label = [UILabel new];
-        
+
         label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:13.0];
         label.textColor = [UIColor redColor];
         label.textAlignment = NSTextAlignmentRight;
@@ -377,7 +377,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     self.didAppear = YES;
-    
+
     if (! self.navBarTap) {
         self.navBarTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(navBarTap:)];
         [self.navigationController.navigationBar addGestureRecognizer:self.navBarTap];
@@ -394,7 +394,7 @@
     if ([UIApplication sharedApplication].protectedDataAvailable) {
         [self performSelector:@selector(protectedViewDidAppear) withObject:nil afterDelay:0.0];
     }
-    
+
     [super viewDidAppear:animated];
 }
 
@@ -407,16 +407,16 @@
     self.protectedObserver = nil;
 
     if ([defs integerForKey:SETTINGS_MAX_DIGITS_KEY] == 5) {
-        manager.format.currencySymbol = @"m" BTC NARROW_NBSP;
+        manager.format.currencySymbol = @"m" GRS NARROW_NBSP;
         manager.format.maximumFractionDigits = 5;
         manager.format.maximum = @((MAX_MONEY/SATOSHIS)*1000);
     }
     else if ([defs integerForKey:SETTINGS_MAX_DIGITS_KEY] == 8) {
-        manager.format.currencySymbol = BTC NARROW_NBSP;
+        manager.format.currencySymbol = GRS NARROW_NBSP;
         manager.format.maximumFractionDigits = 8;
         manager.format.maximum = @(MAX_MONEY/SATOSHIS);
     }
-    
+
     if (manager.noWallet) {
         if (! manager.passcodeEnabled) {
             [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"turn device passcode on", nil)
@@ -465,11 +465,11 @@
         if (self.navigationController.visibleViewController == self) {
             if (self.showTips) [self performSelector:@selector(tip:) withObject:nil afterDelay:0.3];
         }
-        
+
         if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) {
             [[BRPeerManager sharedInstance] connect];
             [UIApplication sharedApplication].applicationIconBadgeNumber = 0; // reset app badge number
-            
+
             if (self.url) [self.sendViewController handleURL:self.url], self.url = nil;
             if (self.file) [self.sendViewController handleFile:self.file], self.file = nil;
         }
@@ -499,10 +499,10 @@
     [segue.destinationViewController setTransitioningDelegate:self];
     [segue.destinationViewController setModalPresentationStyle:UIModalPresentationCustom];
     [self hideErrorBar];
-    
+
     if (sender == self) { // show recovery phrase
         [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"WARNING", nil)
-          message:NSLocalizedString(@"\nDO NOT let anyone see your recovery phrase or they can spend your bitcoins.\n\n"
+          message:NSLocalizedString(@"\nDO NOT let anyone see your recovery phrase or they can spend your groestlcoins.\n\n"
                                     "NEVER type your recovery phrase into password managers or elsewhere. Other "
                                     "devices may be infected.\n", nil)
           delegate:[(id)segue.destinationViewController viewControllers].firstObject
@@ -614,7 +614,7 @@
     if (success) {
         [self.progress setProgress:1.0 animated:YES];
         [self.pulse setProgress:1.0 animated:YES];
-        
+
         [UIView animateWithDuration:0.2 animations:^{
             self.progress.alpha = self.pulse.alpha = 0.0;
         } completion:^(BOOL finished) {
@@ -659,7 +659,7 @@
             [self performSelector:@selector(setProgressTo:) withObject:@(progress) afterDelay:1.0];
         }
         else self.progress.progress = progress;
-        
+
         [UIView animateWithDuration:1.59 delay:1.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
             self.pulse.alpha = 0.0;
         } completion:nil];
@@ -694,15 +694,15 @@
     self.navigationItem.prompt = @"";
     self.errorBar.hidden = NO;
     self.errorBar.alpha = 0.0;
-    
+
     [UIView animateWithDuration:UINavigationControllerHideShowBarDuration delay:0.0
     options:UIViewAnimationOptionCurveEaseIn animations:^{
         self.burger.center = CGPointMake(self.burger.center.x, 70.0);
         self.errorBar.alpha = 1.0;
     } completion:nil];
-    
+
     BRWalletManager *manager = [BRWalletManager sharedInstance];
-    
+
     if (! self.percent.hidden) [self hideTips];
     self.percent.hidden = YES;
     if (! manager.didAuthenticate) self.navigationItem.titleView = self.logo;
@@ -729,16 +729,16 @@
     BRWalletManager *manager = [BRWalletManager sharedInstance];
     NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
     NSTimeInterval now = [NSDate timeIntervalSinceReferenceDate];
-    
+
     if (self.navigationController.visibleViewController != self || ! [defs boolForKey:WALLET_NEEDS_BACKUP_KEY] ||
         manager.wallet.balance == 0 || [defs doubleForKey:BACKUP_DIALOG_TIME_KEY] > now - 36*60*60) return;
-    
+
     BOOL first = ([defs doubleForKey:BACKUP_DIALOG_TIME_KEY] < 1.0) ? YES : NO;
-    
+
     [defs setDouble:now forKey:BACKUP_DIALOG_TIME_KEY];
-    
+
     [[[UIAlertView alloc]
-      initWithTitle:(first) ? NSLocalizedString(@"you received bitcoin!", nil) : NSLocalizedString(@"IMPORTANT", nil)
+      initWithTitle:(first) ? NSLocalizedString(@"you received groestlcoin!", nil) : NSLocalizedString(@"IMPORTANT", nil)
       message:[NSString stringWithFormat:NSLocalizedString(@"\n%@\n\nif you ever lose your phone, you will need it to "
                                                            "recover your wallet", nil),
                (first) ? NSLocalizedString(@"next, write down your recovery phrase", nil) :
@@ -773,7 +773,7 @@
     if ([tipView.text hasPrefix:BALANCE_TIP]) {
         BRWalletManager *manager = [BRWalletManager sharedInstance];
         UINavigationBar *navBar = self.navigationController.navigationBar;
-        NSString *text = [NSString stringWithFormat:BITS_TIP,
+        NSString *text = [NSString stringWithFormat:GROESTL_TIP,
                           manager.format.currencySymbol, [manager stringForAmount:SATOSHIS]];
         CGRect r = [self.navigationItem.title boundingRectWithSize:navBar.bounds.size options:0
                     attributes:navBar.titleTextAttributes context:nil];
@@ -800,7 +800,7 @@
 - (IBAction)tip:(id)sender
 {
     BRWalletManager *manager = [BRWalletManager sharedInstance];
-    
+
     if (sender == self.receiveViewController) {
         BRSendViewController *sendController = self.sendViewController;
 
@@ -838,10 +838,10 @@
 {
     [BREventManager saveEvent:@"root:unlock"];
     BRWalletManager *manager = [BRWalletManager sharedInstance];
-    
+
     if (sender && ! manager.didAuthenticate && ! [manager authenticateWithPrompt:nil andTouchId:YES]) return;
     [BREventManager saveEvent:@"root:unlock_success"];
-    
+
     self.navigationItem.titleView = nil;
     [self.navigationItem setRightBarButtonItem:nil animated:(sender) ? YES : NO];
 }
@@ -872,7 +872,7 @@
 - (IBAction)nextScreen:(id)sender
 {
     BRWalletManager *manager = [BRWalletManager sharedInstance];
-    
+
     if (self.navigationController.presentedViewController) {
         if (manager.noWallet) [manager generateRandomSeed];
         self.showTips = NO;
@@ -933,7 +933,7 @@ viewControllerAfterViewController:(UIViewController *)viewController
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     CGFloat off = scrollView.contentOffset.x + (scrollView.contentInset.left < 0 ? scrollView.contentInset.left : 0);
-    
+
     self.wallpaperXLeft.constant = -PARALAX_RATIO*off;
 }
 
@@ -951,7 +951,7 @@ viewControllerAfterViewController:(UIViewController *)viewController
           otherButtonTitles:nil] showInView:[UIApplication sharedApplication].keyWindow];
         return;
     }
-    
+
     [self performSegueWithIdentifier:@"SettingsSegue" sender:self];
 }
 
@@ -1044,12 +1044,12 @@ viewControllerAfterViewController:(UIViewController *)viewController
         } completion:^(BOOL finished) {
             self.pageViewController.view.center = CGPointMake(self.pageViewController.view.center.x,
                                                               containerView.frame.size.height/2.0);
-            
+
             if (! manager.didAuthenticate) {
                 item.rightBarButtonItem = rightButton;
                 if (self.percent.hidden) item.titleView = titleView;
             }
-            
+
             item.title = self.navigationItem.title;
             item.leftBarButtonItem.image = [UIImage imageNamed:@"x"];
             [containerView addSubview:to.view];
@@ -1061,11 +1061,11 @@ viewControllerAfterViewController:(UIViewController *)viewController
             [[BRPeerManager sharedInstance] connect];
             [self.sendViewController updateClipboardText];
         }
-        
+
         if (manager.didAuthenticate) [self unlock:nil];
         [self.navigationController.navigationBar.superview insertSubview:from.view
          belowSubview:self.navigationController.navigationBar];
-        
+
         UINavigationItem *item = [(id)from topViewController].navigationItem;
         UIView *titleView = item.titleView;
         UIBarButtonItem *rightButton = item.rightBarButtonItem;

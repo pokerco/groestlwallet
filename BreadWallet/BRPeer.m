@@ -915,7 +915,7 @@ services:(uint64_t)services
 
 - (void)acceptMerkleblockMessage:(NSData *)message
 {
-    // Bitcoin nodes don't support querying arbitrary transactions, only transactions not yet accepted in a block. After
+    // groestlcoin nodes don't support querying arbitrary transactions, only transactions not yet accepted in a block. After
     // a merkleblock message, the remote node is expected to send tx messages for the tx referenced in the block. When a
     // non-tx message is received we should have all the tx in the merkleblock.
     BRMerkleBlock *block = [BRMerkleBlock blockWithMessage:message];

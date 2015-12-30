@@ -32,7 +32,7 @@
 #define TARGET_TIMESPAN   (14*24*60*60) // the targeted timespan between difficulty target adjustments
 
 // from https://en.bitcoin.it/wiki/Protocol_specification#Merkle_Trees
-// Merkle trees are binary trees of hashes. Merkle trees in bitcoin use a double SHA-256, the SHA-256 hash of the
+// Merkle trees are binary trees of hashes. Merkle trees in groestlcoin use a double SHA-256, the SHA-256 hash of the
 // SHA-256 hash of something. If, when forming a row in the tree (other than the root of the tree), it would have an odd
 // number of elements, the final double-hash is duplicated to ensure that the row has an even number of hashes. First
 // form the bottom row of the tree with the ordered double-SHA-256 hashes of the byte streams of the transactions in the

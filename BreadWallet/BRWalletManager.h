@@ -28,9 +28,9 @@
 #import "BRWallet.h"
 
 #define SATOSHIS     100000000
-#define MAX_MONEY    (21000000LL*SATOSHIS)
-#define BTC          @"\xC9\x83"     // capital B with stroke (utf-8)
-#define BITS         @"\xC6\x80"     // lowercase b with stroke (utf-8)
+#define MAX_MONEY    (105000000LL*SATOSHIS)
+#define GRS          @"\xc7\xa4"     // capital G with stroke (utf-8)
+#define GROESTL      @"\xc7\xa5"     // lowercase g with stroke (utf-8)
 #define NARROW_NBSP  @"\xE2\x80\xAF" // narrow no-break space (utf-8)
 #define LDQUOTE      @"\xE2\x80\x9C" // left double quote (utf-8)
 #define RDQUOTE      @"\xE2\x80\x9D" // right double quote (utf-8)
@@ -58,7 +58,7 @@
 @property (nonatomic, readonly, getter=isTouchIdEnabled) BOOL touchIdEnabled; // true if touch id is enabled
 @property (nonatomic, readonly, getter=isPasscodeEnabled) BOOL passcodeEnabled; // true if device passcode is enabled
 @property (nonatomic, assign) BOOL didAuthenticate; // true if the user authenticated after this was last set to false
-@property (nonatomic, readonly) NSNumberFormatter *format; // bitcoin currency formatter
+@property (nonatomic, readonly) NSNumberFormatter *format; // groestlcoin currency formatter
 @property (nonatomic, readonly) NSNumberFormatter *localFormat; // local currency formatter
 @property (nonatomic, copy) NSString *localCurrencyCode; // local currency ISO code
 @property (nonatomic, readonly) double localCurrencyPrice; // exchange rate in local currency units per bitcoin

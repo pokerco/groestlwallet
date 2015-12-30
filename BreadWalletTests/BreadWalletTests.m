@@ -80,7 +80,7 @@
 - (void)testBase58
 {
     // test bad input
-    NSString *s = [NSString base58WithData:[BTC @"#&$@*^(*#!^" base58ToData]];
+    NSString *s = [NSString base58WithData:[GRS @"#&$@*^(*#!^" base58ToData]];
 
     XCTAssertTrue(s.length == 0, @"[NSString base58WithData:]");
 
@@ -549,59 +549,59 @@
 #pragma mark - testPaymentRequest
 
 //TODO: test valid request with unknown arguments
-//TODO: test invalid bitcoin address
+//TODO: test invalid groestlcoin address
 //TODO: test invalid request with unknown required arguments
 
 - (void)testPaymentRequest
 {
-    BRPaymentRequest *r = [BRPaymentRequest requestWithString:@"bitcoin:1BTCorgHwCg6u2YSAWKgS17qUad6kHmtQW"];
-    XCTAssertEqualObjects(@"bitcoin:1BTCorgHwCg6u2YSAWKgS17qUad6kHmtQW", r.string,
+    BRPaymentRequest *r = [BRPaymentRequest requestWithString:@"groestlcoin:FZ4AfMJjHNzjtMHvFR244TZf2934Y6J5Fr"];
+    XCTAssertEqualObjects(@"groestlcoin:FZ4AfMJjHNzjtMHvFR244TZf2934Y6J5Fr", r.string,
                           @"[BRPaymentRequest requestWithString:]");
 
-    r = [BRPaymentRequest requestWithString:@"bitcoin:1BTCorgHwCg6u2YSAWKgS17qUad6kHmtQW?amount=1"];
+    r = [BRPaymentRequest requestWithString:@"groestlcoin:FZ4AfMJjHNzjtMHvFR244TZf2934Y6J5Fr?amount=1"];
     XCTAssertEqual(100000000, r.amount, @"[BRPaymentRequest requestWithString:]");
-    XCTAssertEqualObjects(@"bitcoin:1BTCorgHwCg6u2YSAWKgS17qUad6kHmtQW?amount=1", r.string,
+    XCTAssertEqualObjects(@"groestlcoin:FZ4AfMJjHNzjtMHvFR244TZf2934Y6J5Fr?amount=1", r.string,
                           @"[BRPaymentRequest requestWithString:]");
 
-    r = [BRPaymentRequest requestWithString:@"bitcoin:1BTCorgHwCg6u2YSAWKgS17qUad6kHmtQW?amount=0.00000001"];
+    r = [BRPaymentRequest requestWithString:@"groestlcoin:FZ4AfMJjHNzjtMHvFR244TZf2934Y6J5Fr?amount=0.00000001"];
     XCTAssertEqual(1, r.amount, @"[BRPaymentRequest requestWithString:]");
-    XCTAssertEqualObjects(@"bitcoin:1BTCorgHwCg6u2YSAWKgS17qUad6kHmtQW?amount=0.00000001", r.string,
+    XCTAssertEqualObjects(@"groestlcoin:FZ4AfMJjHNzjtMHvFR244TZf2934Y6J5Fr?amount=0.00000001", r.string,
                           @"[BRPaymentRequest requestWithString:]");
 
-    r = [BRPaymentRequest requestWithString:@"bitcoin:1BTCorgHwCg6u2YSAWKgS17qUad6kHmtQW?amount=21000000"];
+    r = [BRPaymentRequest requestWithString:@"groestlcoin:FZ4AfMJjHNzjtMHvFR244TZf2934Y6J5Fr?amount=21000000"];
     XCTAssertEqual(2100000000000000, r.amount, @"[BRPaymentRequest requestWithString:]");
-    XCTAssertEqualObjects(@"bitcoin:1BTCorgHwCg6u2YSAWKgS17qUad6kHmtQW?amount=21000000", r.string,
+    XCTAssertEqualObjects(@"groestlcoin:FZ4AfMJjHNzjtMHvFR244TZf2934Y6J5Fr?amount=21000000", r.string,
                           @"[BRPaymentRequest requestWithString:]");
 
     // test for floating point rounding issues, these values cannot be exactly represented with an IEEE 754 double
-    r = [BRPaymentRequest requestWithString:@"bitcoin:1BTCorgHwCg6u2YSAWKgS17qUad6kHmtQW?amount=20999999.99999999"];
+    r = [BRPaymentRequest requestWithString:@"groestlcoin:FZ4AfMJjHNzjtMHvFR244TZf2934Y6J5Fr?amount=20999999.99999999"];
     XCTAssertEqual(2099999999999999, r.amount, @"[BRPaymentRequest requestWithString:]");
-    XCTAssertEqualObjects(@"bitcoin:1BTCorgHwCg6u2YSAWKgS17qUad6kHmtQW?amount=20999999.99999999", r.string,
+    XCTAssertEqualObjects(@"groestlcoin:FZ4AfMJjHNzjtMHvFR244TZf2934Y6J5Fr?amount=20999999.99999999", r.string,
                           @"[BRPaymentRequest requestWithString:]");
 
-    r = [BRPaymentRequest requestWithString:@"bitcoin:1BTCorgHwCg6u2YSAWKgS17qUad6kHmtQW?amount=20999999.99999995"];
+    r = [BRPaymentRequest requestWithString:@"groestlcoin:FZ4AfMJjHNzjtMHvFR244TZf2934Y6J5Fr?amount=20999999.99999995"];
     XCTAssertEqual(2099999999999995, r.amount, @"[BRPaymentRequest requestWithString:]");
-    XCTAssertEqualObjects(@"bitcoin:1BTCorgHwCg6u2YSAWKgS17qUad6kHmtQW?amount=20999999.99999995", r.string,
+    XCTAssertEqualObjects(@"groestlcoin:FZ4AfMJjHNzjtMHvFR244TZf2934Y6J5Fr?amount=20999999.99999995", r.string,
                           @"[BRPaymentRequest requestWithString:]");
 
-    r = [BRPaymentRequest requestWithString:@"bitcoin:1BTCorgHwCg6u2YSAWKgS17qUad6kHmtQW?amount=20999999.9999999"];
+    r = [BRPaymentRequest requestWithString:@"groestlcoin:FZ4AfMJjHNzjtMHvFR244TZf2934Y6J5Fr?amount=20999999.9999999"];
     XCTAssertEqual(2099999999999990, r.amount, @"[BRPaymentRequest requestWithString:]");
-    XCTAssertEqualObjects(@"bitcoin:1BTCorgHwCg6u2YSAWKgS17qUad6kHmtQW?amount=20999999.9999999", r.string,
+    XCTAssertEqualObjects(@"groestlcoin:FZ4AfMJjHNzjtMHvFR244TZf2934Y6J5Fr?amount=20999999.9999999", r.string,
                           @"[BRPaymentRequest requestWithString:]");
 
-    r = [BRPaymentRequest requestWithString:@"bitcoin:1BTCorgHwCg6u2YSAWKgS17qUad6kHmtQW?amount=0.07433"];
+    r = [BRPaymentRequest requestWithString:@"groestlcoin:FZ4AfMJjHNzjtMHvFR244TZf2934Y6J5Fr?amount=0.07433"];
     XCTAssertEqual(7433000, r.amount, @"[BRPaymentRequest requestWithString:]");
-    XCTAssertEqualObjects(@"bitcoin:1BTCorgHwCg6u2YSAWKgS17qUad6kHmtQW?amount=0.07433", r.string,
+    XCTAssertEqualObjects(@"groestlcoin:FZ4AfMJjHNzjtMHvFR244TZf2934Y6J5Fr?amount=0.07433", r.string,
                           @"[BRPaymentRequest requestWithString:]");
 
     // invalid amount string
-    r = [BRPaymentRequest requestWithString:@"bitcoin:1BTCorgHwCg6u2YSAWKgS17qUad6kHmtQW?amount=foobar"];
-    XCTAssertEqualObjects(@"bitcoin:1BTCorgHwCg6u2YSAWKgS17qUad6kHmtQW", r.string,
+    r = [BRPaymentRequest requestWithString:@"groestlcoin:FZ4AfMJjHNzjtMHvFR244TZf2934Y6J5Fr?amount=foobar"];
+    XCTAssertEqualObjects(@"groestlcoin:FZ4AfMJjHNzjtMHvFR244TZf2934Y6J5Fr", r.string,
                           @"[BRPaymentRequest requestWithString:]");
 
     // test correct encoding of '&' in argument value
-    r = [BRPaymentRequest requestWithString:@"bitcoin:1BTCorgHwCg6u2YSAWKgS17qUad6kHmtQW?label=foo%26bar"];
-    XCTAssertEqualObjects(@"bitcoin:1BTCorgHwCg6u2YSAWKgS17qUad6kHmtQW?label=foo%26bar", r.string,
+    r = [BRPaymentRequest requestWithString:@"groestlcoin:FZ4AfMJjHNzjtMHvFR244TZf2934Y6J5Fr?label=foo%26bar"];
+    XCTAssertEqualObjects(@"groestlcoin:FZ4AfMJjHNzjtMHvFR244TZf2934Y6J5Fr?label=foo%26bar", r.string,
                           @"[BRPaymentRequest requestWithString:]");
 }
 

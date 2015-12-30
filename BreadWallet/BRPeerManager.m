@@ -965,16 +965,16 @@ static const char *dns_seeds[] = {
 {
     if (! transaction.isSigned) {
         if (completion) {
-            completion([NSError errorWithDomain:@"BreadWallet" code:401 userInfo:@{NSLocalizedDescriptionKey:
-                        NSLocalizedString(@"bitcoin transaction not signed", nil)}]);
+            completion([NSError errorWithDomain:@"GroestlWallet" code:401 userInfo:@{NSLocalizedDescriptionKey:
+                        NSLocalizedString(@"groestlcoin transaction not signed", nil)}]);
         }
 
         return;
     }
     else if (! self.connected && self.connectFailures >= MAX_CONNECT_FAILURES) {
         if (completion) {
-            completion([NSError errorWithDomain:@"BreadWallet" code:-1009 userInfo:@{NSLocalizedDescriptionKey:
-                        NSLocalizedString(@"not connected to the bitcoin network", nil)}]);
+            completion([NSError errorWithDomain:@"GroestlWallet" code:-1009 userInfo:@{NSLocalizedDescriptionKey:
+                        NSLocalizedString(@"not connected to the groestlcoin network", nil)}]);
         }
 
         return;
@@ -1127,7 +1127,7 @@ static const char *dns_seeds[] = {
                 [p sendPingMessageWithPongHandler:^(BOOL success) {
                     if (success) {
                         p.synced = YES;
-                        [p sendGetaddrMessage]; // request a list of other bitcoin peers
+                        [p sendGetaddrMessage]; // request a list of other groestlcoin peers
                         [self removeUnrelayedTransactions];
                     }
 
@@ -1374,7 +1374,7 @@ static const char *dns_seeds[] = {
             [peer sendPingMessageWithPongHandler:^(BOOL success) {
                 if (! success) return;
                 peer.synced = YES;
-                [peer sendGetaddrMessage]; // request a list of other bitcoin peers
+                [peer sendGetaddrMessage]; // request a list of other groestlcoin peers
                 [self removeUnrelayedTransactions];
             }];
         }];
