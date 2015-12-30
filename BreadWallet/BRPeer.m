@@ -745,8 +745,8 @@ services:(uint64_t)services
     NSTimeInterval t = [message UInt32AtOffset:l + 81*(count - 1) + 68] - NSTimeIntervalSince1970;
 
     if (count >= 2000 || t + 7*24*60*60 >= self.earliestKeyTime - 2*60*60) {
-        NSValue *firstHash = uint256_obj([message subdataWithRange:NSMakeRange(l, 80)].SHA256_2),
-                *lastHash = uint256_obj([message subdataWithRange:NSMakeRange(l + 81*(count - 1), 80)].SHA256_2);
+        NSValue *firstHash = uint256_obj([message subdataWithRange:NSMakeRange(l, 80)].HashGroestl_2),
+                *lastHash = uint256_obj([message subdataWithRange:NSMakeRange(l + 81*(count - 1), 80)].HashGroestl_2);
 
         if (t + 7*24*60*60 >= self.earliestKeyTime - 2*60*60) { // request blocks for the remainder of the chain
             t = [message UInt32AtOffset:l + 81 + 68] - NSTimeIntervalSince1970;
@@ -756,7 +756,7 @@ services:(uint64_t)services
                 t = [message UInt32AtOffset:off + 81 + 68] - NSTimeIntervalSince1970;
             }
 
-            lastHash = uint256_obj([message subdataWithRange:NSMakeRange(off, 80)].SHA256_2);
+            lastHash = uint256_obj([message subdataWithRange:NSMakeRange(off, 80)].HashGroestl_2);
             NSLog(@"%@:%u calling getblocks with locators: %@", self.host, self.port, @[lastHash, firstHash]);
             [self sendGetblocksMessageWithLocators:@[lastHash, firstHash] andHashStop:UINT256_ZERO];
         }
@@ -1084,10 +1084,10 @@ services:(uint64_t)services
                         if (self.msgPayload.length < length) continue; // wait for more stream input
                     }
 
-                    if (CFSwapInt32LittleToHost(self.msgPayload.SHA256_2.u32[0]) != checksum) { // verify checksum
+                    if (CFSwapInt32LittleToHost(self.msgPayload.HashGroestl_2.u32[0]) != checksum) { // verify checksum
                         [self error:@"error reading %@, invalid checksum %x, expected %x, payload length:%u, expected "
-                         "length:%u, SHA256_2:%@", type, self.msgPayload.SHA256_2.u32[0], checksum,
-                         (int)self.msgPayload.length, length, uint256_obj(self.msgPayload.SHA256_2)];
+                         "length:%u, HashGroestl_2:%@", type, self.msgPayload.HashGroestl_2.u32[0], checksum,
+                         (int)self.msgPayload.length, length, uint256_obj(self.msgPayload.HashGroestl_2)];
                         goto reset;
                     }
 

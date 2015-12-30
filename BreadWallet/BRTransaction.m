@@ -51,7 +51,7 @@
 - (instancetype)init
 {
     if (! (self = [super init])) return nil;
-    
+
     _version = TX_VERSION;
     self.hashes = [NSMutableArray array];
     self.indexes = [NSMutableArray array];
@@ -69,7 +69,7 @@
 - (instancetype)initWithMessage:(NSData *)message
 {
     if (! (self = [self init])) return nil;
- 
+
     NSString *address = nil;
     NSUInteger l = 0, off = 0, count = 0;
     NSData *d = nil;
@@ -109,9 +109,9 @@
         }
 
         _lockTime = [message UInt32AtOffset:off]; // tx locktime
-        _txHash = self.data.SHA256_2;
+        _txHash = self.data.SHA256;
     }
-    
+
     return self;
 }
 
@@ -204,7 +204,7 @@ outputAddresses:(NSArray *)addresses outputAmounts:(NSArray *)amounts
 {
     static const size_t sigSize = 149; // signature size using a compact pubkey
 //    static const size_t sigSize = 181; // signature size using a non-compact pubkey
-    
+
     if (! uint256_is_zero(_txHash)) return self.data.length;
     return 8 + [NSMutableData sizeOfVarInt:self.hashes.count] + [NSMutableData sizeOfVarInt:self.addresses.count] +
            sigSize*self.hashes.count + 34*self.addresses.count;
@@ -284,10 +284,10 @@ sequence:(uint32_t)sequence
 }
 
 - (void)shuffleOutputOrder
-{    
+{
     for (NSUInteger i = 0; i + 1 < self.amounts.count; i++) { // fischer-yates shuffle
         NSUInteger j = i + arc4random_uniform((uint32_t)(self.amounts.count - i));
-        
+
         if (j == i) continue;
         [self.amounts exchangeObjectAtIndex:i withObjectAtIndex:j];
         [self.outScripts exchangeObjectAtIndex:i withObjectAtIndex:j];
@@ -320,18 +320,18 @@ sequence:(uint32_t)sequence
             [d appendData:self.inScripts[i]];
         }
         else [d appendVarInt:0];
-        
+
         [d appendUInt32:[self.sequences[i] unsignedIntValue]];
     }
-    
+
     [d appendVarInt:self.amounts.count];
-    
+
     for (NSUInteger i = 0; i < self.amounts.count; i++) {
         [d appendUInt64:[self.amounts[i] unsignedLongLongValue]];
         [d appendVarInt:[self.outScripts[i] length]];
         [d appendData:self.outScripts[i]];
     }
-    
+
     [d appendUInt32:self.lockTime];
     if (subscriptIndex != NSNotFound) [d appendUInt32:SIGHASH_ALL];
     return d;
@@ -341,38 +341,38 @@ sequence:(uint32_t)sequence
 {
     NSMutableArray *addresses = [NSMutableArray arrayWithCapacity:privateKeys.count],
                    *keys = [NSMutableArray arrayWithCapacity:privateKeys.count];
-    
+
     for (NSString *pk in privateKeys) {
         BRKey *key = [BRKey keyWithPrivateKey:pk];
-        
+
         if (! key) continue;
         [keys addObject:key];
         [addresses addObject:key.address];
     }
-    
+
     for (NSUInteger i = 0; i < self.hashes.count; i++) {
         NSString *addr = [NSString addressWithScriptPubKey:self.inScripts[i]];
         NSUInteger keyIdx = (addr) ? [addresses indexOfObject:addr] : NSNotFound;
-        
+
         if (keyIdx == NSNotFound) continue;
-        
+
         NSMutableData *sig = [NSMutableData data];
-        UInt256 hash = [self toDataWithSubscriptIndex:i].SHA256_2;
+        UInt256 hash = [self toDataWithSubscriptIndex:i].SHA256;
         NSMutableData *s = [NSMutableData dataWithData:[keys[keyIdx] sign:hash]];
         NSArray *elem = [self.inScripts[i] scriptElements];
-        
+
         [s appendUInt8:SIGHASH_ALL];
         [sig appendScriptPushData:s];
-        
+
         if (elem.count >= 2 && [elem[elem.count - 2] intValue] == OP_EQUALVERIFY) { // pay-to-pubkey-hash scriptSig
             [sig appendScriptPushData:[keys[keyIdx] publicKey]];
         }
-        
+
         self.signatures[i] = sig;
     }
-    
+
     if (! self.isSigned) return NO;
-    _txHash = self.data.SHA256_2;
+    _txHash = self.data.SHA256;
     return YES;
 }
 
@@ -380,13 +380,13 @@ sequence:(uint32_t)sequence
 - (uint64_t)priorityForAmounts:(NSArray *)amounts withAges:(NSArray *)ages
 {
     uint64_t p = 0;
-    
+
     if (amounts.count != self.hashes.count || ages.count != self.hashes.count || [ages containsObject:@(0)]) return 0;
-    
-    for (NSUInteger i = 0; i < amounts.count; i++) {    
+
+    for (NSUInteger i = 0; i < amounts.count; i++) {
         p += [amounts[i] unsignedLongLongValue]*[ages[i] unsignedLongLongValue];
     }
-    
+
     return p/self.size;
 }
 
@@ -403,14 +403,14 @@ sequence:(uint32_t)sequence
     }
 
     uint64_t amountTotal = 0, amountsByHeights = 0;
-    
+
     for (NSUInteger i = 0; i < amounts.count; i++) {
         amountTotal += [amounts[i] unsignedLongLongValue];
         amountsByHeights += [amounts[i] unsignedLongLongValue]*[heights[i] unsignedLongLongValue];
     }
-    
+
     if (amountTotal == 0) return TX_UNCONFIRMED;
-    
+
     // this could possibly overflow a uint64 for very large input amounts and far in the future block heights,
     // however we should be okay up to the largest current bitcoin balance in existence for the next 40 years or so,
     // and the worst case is paying a transaction fee when it's not needed
