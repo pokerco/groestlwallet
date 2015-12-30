@@ -74,6 +74,10 @@
 		BAA4843D1B3EFFAF0075C749 /* UIImage+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = BAA4843B1B3EFFAF0075C749 /* UIImage+Utils.m */; };
 		BAE12BF21B2DEE7F00895CC5 /* TodayExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = BAE12BE51B2DEE7F00895CC5 /* TodayExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BAE12C061B2DEEF700895CC5 /* BRTodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE12C051B2DEEF700895CC5 /* BRTodayViewController.m */; };
+		DC807F1D1A9F655B00125DF2 /* groestl.c in Sources */ = {isa = PBXBuildFile; fileRef = DC807F1A1A9F655B00125DF2 /* groestl.c */; };
+		DC807F1E1A9F655B00125DF2 /* sph_groestl.h in Headers */ = {isa = PBXBuildFile; fileRef = DC807F1B1A9F655B00125DF2 /* sph_groestl.h */; };
+		DC807F1F1A9F655B00125DF2 /* sph_types.h in Headers */ = {isa = PBXBuildFile; fileRef = DC807F1C1A9F655B00125DF2 /* sph_types.h */; };
+		DC807F201A9F666700125DF2 /* libgroestl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DC807F151A9F652F00125DF2 /* libgroestl.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -345,6 +349,10 @@
 		BAE12BEA1B2DEE7F00895CC5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BAE12C041B2DEEF700895CC5 /* BRTodayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRTodayViewController.h; sourceTree = "<group>"; };
 		BAE12C051B2DEEF700895CC5 /* BRTodayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRTodayViewController.m; sourceTree = "<group>"; };
+		DC807F151A9F652F00125DF2 /* libgroestl.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libgroestl.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		DC807F1A1A9F655B00125DF2 /* groestl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = groestl.c; sourceTree = "<group>"; };
+		DC807F1B1A9F655B00125DF2 /* sph_groestl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sph_groestl.h; sourceTree = "<group>"; };
+		DC807F1C1A9F655B00125DF2 /* sph_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sph_types.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -359,6 +367,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+							DC807F201A9F666700125DF2 /* libgroestl.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,6 +384,13 @@
 			files = (
 				75F2E0B71BE2D5F100EAE861 /* Accelerate.framework in Frameworks */,
 				75CE50BB1B52564B00DBC18C /* NotificationCenter.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DC807F121A9F652F00125DF2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -488,6 +504,9 @@
 		7579F7FE19231D4600CA56F4 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				DC807F1A1A9F655B00125DF2 /* groestl.c */,
+				DC807F1B1A9F655B00125DF2 /* sph_groestl.h */,
+				DC807F1C1A9F655B00125DF2 /* sph_types.h */,
 				752E28EF19234E8100DB5A3C /* Reachability.h */,
 				752E28F019234E8100DB5A3C /* Reachability.m */,
 				758B161A1AA9ADC4002C65DD /* secp256k1 */,
@@ -598,6 +617,7 @@
 				75D5F3E5191EC270004AB296 /* BreadWalletTests.xctest */,
 				BAE12BE51B2DEE7F00895CC5 /* TodayExtension.appex */,
 				31D68B501C23B6C10030FAAA /* BreadWalletUITests.xctest */,
+				DC807F151A9F652F00125DF2 /* libgroestl.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -714,6 +734,18 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		DC807F131A9F652F00125DF2 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC807F1F1A9F655B00125DF2 /* sph_types.h in Headers */,
+				DC807F1E1A9F655B00125DF2 /* sph_groestl.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXLegacyTarget section */
 		75001D3D1A1EE89500585F55 /* submodules */ = {
 			isa = PBXLegacyTarget;
@@ -805,6 +837,23 @@
 			productReference = BAE12BE51B2DEE7F00895CC5 /* TodayExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		DC807F141A9F652F00125DF2 /* groestl */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DC807F161A9F652F00125DF2 /* Build configuration list for PBXNativeTarget "groestl" */;
+			buildPhases = (
+				DC807F111A9F652F00125DF2 /* Sources */,
+				DC807F121A9F652F00125DF2 /* Frameworks */,
+				DC807F131A9F652F00125DF2 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = groestl;
+			productName = groestl;
+			productReference = DC807F151A9F652F00125DF2 /* libgroestl.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -841,7 +890,7 @@
 					75D5F3E4191EC270004AB296 = {
 						TestTargetID = 75D5F3BD191EC270004AB296;
 					};
-					BAE12BE41B2DEE7F00895CC5 = {
+					DC807F141A9F652F00125DF2 = {
 						CreatedOnToolsVersion = 6.3.2;
 						DevelopmentTeam = 4R7S6N88W9;
 						SystemCapabilities = {
@@ -888,6 +937,7 @@
 				75D5F3E4191EC270004AB296 /* BreadWalletTests */,
 				31D68B4F1C23B6C10030FAAA /* BreadWalletUITests */,
 				75001D3D1A1EE89500585F55 /* submodules */,
+				DC807F141A9F652F00125DF2 /* groestl */,
 			);
 		};
 /* End PBXProject section */
@@ -1013,6 +1063,14 @@
 				BAE12C061B2DEEF700895CC5 /* BRTodayViewController.m in Sources */,
 				BAA4843D1B3EFFAF0075C749 /* UIImage+Utils.m in Sources */,
 				75E2503F1B7691C900A2BB2B /* BRBubbleView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DC807F111A9F652F00125DF2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC807F1D1A9F655B00125DF2 /* groestl.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1406,6 +1464,57 @@
 			};
 			name = Release;
 		};
+		DC807F171A9F652F00125DF2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		DC807F181A9F652F00125DF2 /* GCov_Build */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				EXECUTABLE_PREFIX = lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = GCov_Build;
+		};
+		DC807F191A9F652F00125DF2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				EXECUTABLE_PREFIX = lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1462,6 +1571,16 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		DC807F161A9F652F00125DF2 /* Build configuration list for PBXNativeTarget "groestl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DC807F171A9F652F00125DF2 /* Debug */,
+				DC807F181A9F652F00125DF2 /* GCov_Build */,
+				DC807F191A9F652F00125DF2 /* Release */,
+			);
+	defaultConfigurationIsVisible = 0;
+	defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
