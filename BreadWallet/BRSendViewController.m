@@ -1020,7 +1020,7 @@ fromConnection:(AVCaptureConnection *)connection
                         self.scanController.cameraGuide.image = [UIImage imageNamed:@"cameraguide-red"];
 
                         if (([request.scheme isEqual:@"groestlcoin"] && request.paymentAddress.length > 1) ||
-                            [request.paymentAddress hasPrefix:@"1"] || [request.paymentAddress hasPrefix:@"3"]) {
+                            [request.paymentAddress hasPrefix:@"F"] || [request.paymentAddress hasPrefix:@"3"]) {
                             self.scanController.message.text = [NSString stringWithFormat:@"%@:\n%@",
                                                                 NSLocalizedString(@"not a valid groestlcoin address", nil),
                                                                 request.paymentAddress];

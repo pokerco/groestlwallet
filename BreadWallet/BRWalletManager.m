@@ -979,7 +979,7 @@ completion:(void (^)(NSArray *utxos, NSArray *amounts, NSArray *scripts, NSError
 
         if (! [json isKindOfClass:[NSArray class]]) {
             completion(nil, nil, nil,
-                       [NSError errorWithDomain:@"BreadWallet" code:417 userInfo:@{NSLocalizedDescriptionKey:
+                       [NSError errorWithDomain:@"GroestlWallet" code:417 userInfo:@{NSLocalizedDescriptionKey:
                         [NSString stringWithFormat:NSLocalizedString(@"unexpected response from %@", nil), u.host]}]);
             return;
         }
@@ -993,7 +993,7 @@ completion:(void (^)(NSArray *utxos, NSArray *amounts, NSArray *scripts, NSError
                 ! [utxo[@"scriptPubKey"] hexToData] ||
                 ! [utxo[@"amount"] isKindOfClass:[NSNumber class]]) {
                 completion(nil, nil, nil,
-                           [NSError errorWithDomain:@"BreadWallet" code:417 userInfo:@{NSLocalizedDescriptionKey:
+                           [NSError errorWithDomain:@"GroestlWallet" code:417 userInfo:@{NSLocalizedDescriptionKey:
                             [NSString stringWithFormat:NSLocalizedString(@"unexpected response from %@", nil),
                              u.host]}]);
                 return;
@@ -1035,13 +1035,13 @@ completion:(void (^)(BRTransaction *tx, uint64_t fee, NSError *error))completion
     BRKey *key = [BRKey keyWithPrivateKey:privKey];
 
     if (! key.address) {
-        completion(nil, 0, [NSError errorWithDomain:@"BreadWallet" code:187 userInfo:@{NSLocalizedDescriptionKey:
+        completion(nil, 0, [NSError errorWithDomain:@"GroestlWallet" code:187 userInfo:@{NSLocalizedDescriptionKey:
                             NSLocalizedString(@"not a valid private key", nil)}]);
         return;
     }
 
     if ([self.wallet containsAddress:key.address]) {
-        completion(nil, 0, [NSError errorWithDomain:@"BreadWallet" code:187 userInfo:@{NSLocalizedDescriptionKey:
+        completion(nil, 0, [NSError errorWithDomain:@"GroestlWallet" code:187 userInfo:@{NSLocalizedDescriptionKey:
                             NSLocalizedString(@"this private key is already in your wallet", nil)}]);
         return;
     }
@@ -1066,7 +1066,7 @@ completion:(void (^)(BRTransaction *tx, uint64_t fee, NSError *error))completion
         }
 
         if (balance == 0) {
-            completion(nil, 0, [NSError errorWithDomain:@"BreadWallet" code:417 userInfo:@{NSLocalizedDescriptionKey:
+            completion(nil, 0, [NSError errorWithDomain:@"GroestlWallet" code:417 userInfo:@{NSLocalizedDescriptionKey:
                                 NSLocalizedString(@"this private key is empty", nil)}]);
             return;
         }
@@ -1075,7 +1075,7 @@ completion:(void (^)(BRTransaction *tx, uint64_t fee, NSError *error))completion
         if (fee) feeAmount = [self.wallet feeForTxSize:tx.size + 34 + (key.publicKey.length - 33)*tx.inputHashes.count];
 
         if (feeAmount + self.wallet.minOutputAmount > balance) {
-            completion(nil, 0, [NSError errorWithDomain:@"BreadWallet" code:417 userInfo:@{NSLocalizedDescriptionKey:
+            completion(nil, 0, [NSError errorWithDomain:@"GroestlWallet" code:417 userInfo:@{NSLocalizedDescriptionKey:
                                 NSLocalizedString(@"transaction fees would cost more than the funds available on this "
                                                   "private key (due to tiny \"dust\" deposits)",nil)}]);
             return;
@@ -1084,7 +1084,7 @@ completion:(void (^)(BRTransaction *tx, uint64_t fee, NSError *error))completion
         [tx addOutputAddress:self.wallet.changeAddress amount:balance - feeAmount];
 
         if (! [tx signWithPrivateKeys:@[privKey]]) {
-            completion(nil, 0, [NSError errorWithDomain:@"BreadWallet" code:401 userInfo:@{NSLocalizedDescriptionKey:
+            completion(nil, 0, [NSError errorWithDomain:@"GroestlWallet" code:401 userInfo:@{NSLocalizedDescriptionKey:
                                 NSLocalizedString(@"error signing transaction", nil)}]);
             return;
         }

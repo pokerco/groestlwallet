@@ -296,7 +296,7 @@
 		75CE50B51B5216F100DBC18C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = BreadWalletTests/Info.plist; sourceTree = SOURCE_ROOT; };
 		75CE50BC1B525CFD00DBC18C /* TodayExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = TodayExtension.entitlements; sourceTree = "<group>"; };
 		75CE50BD1B525D1B00DBC18C /* breadwallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = breadwallet.entitlements; path = ../breadwallet/breadwallet.entitlements; sourceTree = "<group>"; };
-		75D5F3BE191EC270004AB296 /* breadwallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = breadwallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		75D5F3BE191EC270004AB296 /* groestlwallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = groestlwallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75D5F3C9191EC270004AB296 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		75D5F3CD191EC270004AB296 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		75D5F3CF191EC270004AB296 /* BreadWallet-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BreadWallet-Prefix.pch"; sourceTree = "<group>"; };
@@ -613,7 +613,7 @@
 		75D5F3BF191EC270004AB296 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				75D5F3BE191EC270004AB296 /* breadwallet.app */,
+				75D5F3BE191EC270004AB296 /* Groestlwallet.app */,
 				75D5F3E5191EC270004AB296 /* BreadWalletTests.xctest */,
 				BAE12BE51B2DEE7F00895CC5 /* TodayExtension.appex */,
 				31D68B501C23B6C10030FAAA /* BreadWalletUITests.xctest */,
@@ -782,9 +782,9 @@
 			productReference = 31D68B501C23B6C10030FAAA /* BreadWalletUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		75D5F3BD191EC270004AB296 /* breadwallet */ = {
+		75D5F3BD191EC270004AB296 /* groestlwallet */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 75D5F3F6191EC270004AB296 /* Build configuration list for PBXNativeTarget "breadwallet" */;
+			buildConfigurationList = 75D5F3F6191EC270004AB296 /* Build configuration list for PBXNativeTarget "groestlwallet" */;
 			buildPhases = (
 				75D5F3BA191EC270004AB296 /* Sources */,
 				75D5F3BB191EC270004AB296 /* Frameworks */,
@@ -797,9 +797,9 @@
 				757FC2531ADA30D100A1FDF7 /* PBXTargetDependency */,
 				BAE12BF11B2DEE7F00895CC5 /* PBXTargetDependency */,
 			);
-			name = breadwallet;
-			productName = BreadWallet;
-			productReference = 75D5F3BE191EC270004AB296 /* breadwallet.app */;
+			name = groestlwallet;
+			productName = GroestlWallet;
+			productReference = 75D5F3BE191EC270004AB296 /* groestlwallet.app */;
 			productType = "com.apple.product-type.application";
 		};
 		75D5F3E4191EC270004AB296 /* BreadWalletTests */ = {
@@ -901,7 +901,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 75D5F3B9191EC270004AB296 /* Build configuration list for PBXProject "BreadWallet" */;
+			buildConfigurationList = 75D5F3B9191EC270004AB296 /* Build configuration list for PBXProject "GroestlWallet" */;
 			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -1386,7 +1386,7 @@
 		75D5F3FA191EC270004AB296 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/breadwallet.app/breadwallet";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/groestlwallet.app/groestlwallet";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BreadWallet/BreadWallet-Prefix.pch";
 				GCC_WARN_PEDANTIC = NO;
@@ -1401,7 +1401,7 @@
 		75D5F3FB191EC270004AB296 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/breadwallet.app/breadwallet";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/groestlwallet.app/groestlwallet";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BreadWallet/BreadWallet-Prefix.pch";
 				GCC_WARN_PEDANTIC = NO;
@@ -1536,7 +1536,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		75D5F3B9191EC270004AB296 /* Build configuration list for PBXProject "BreadWallet" */ = {
+		75D5F3B9191EC270004AB296 /* Build configuration list for PBXProject "GroestlWallet" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				75D5F3F4191EC270004AB296 /* Debug */,
@@ -1545,7 +1545,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		75D5F3F6191EC270004AB296 /* Build configuration list for PBXNativeTarget "breadwallet" */ = {
+		75D5F3F6191EC270004AB296 /* Build configuration list for PBXNativeTarget "groestlwallet" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				75D5F3F7191EC270004AB296 /* Debug */,

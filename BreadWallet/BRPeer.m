@@ -186,7 +186,7 @@ services:(uint64_t)services
 
         // after the reachablity check, the radios should be warmed up and we can set a short socket connect timeout
         [self performSelector:@selector(disconnectWithError:)
-         withObject:[NSError errorWithDomain:@"BreadWallet" code:BITCOIN_TIMEOUT_CODE
+         withObject:[NSError errorWithDomain:@"GroestlWallet" code:BITCOIN_TIMEOUT_CODE
                      userInfo:@{NSLocalizedDescriptionKey:NSLocalizedString(@"connect timeout", nil)}]
          afterDelay:CONNECT_TIMEOUT];
 
@@ -238,7 +238,7 @@ services:(uint64_t)services
     va_list args;
 
     va_start(args, message);
-    [self disconnectWithError:[NSError errorWithDomain:@"BreadWallet" code:500
+    [self disconnectWithError:[NSError errorWithDomain:@"GroestlWallet" code:500
      userInfo:@{NSLocalizedDescriptionKey:[[NSString alloc] initWithFormat:message arguments:args]}]];
     va_end(args);
 }
@@ -1005,7 +1005,7 @@ services:(uint64_t)services
                 self.startTime = [NSDate timeIntervalSinceReferenceDate]; // don't count connect time in ping time
                 [NSObject cancelPreviousPerformRequestsWithTarget:self]; // cancel pending socket connect timeout
                 [self performSelector:@selector(disconnectWithError:)
-                 withObject:[NSError errorWithDomain:@"BreadWallet" code:BITCOIN_TIMEOUT_CODE
+                 withObject:[NSError errorWithDomain:@"GroestlWallet" code:BITCOIN_TIMEOUT_CODE
                              userInfo:@{NSLocalizedDescriptionKey:NSLocalizedString(@"connect timeout", nil)}]
                              afterDelay:CONNECT_TIMEOUT];
             }

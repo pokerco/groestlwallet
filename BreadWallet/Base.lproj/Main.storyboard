@@ -2212,7 +2212,7 @@
                                     <label opaque="NO" clipsSubviews="YES" tag="411" contentMode="left" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="uvz-hk-Nr4">
                                         <rect key="frame" x="71" y="20" width="233" height="80.5"/>
                                         <gestureRecognizers/>
-                                        <string key="text">breadwallet v%ver%%net%
+                                        <string key="text">groestlwallet v%ver%%net%
 copyright © 2015 Aaron Voisine
 
 this app is open source</string>
@@ -2221,7 +2221,7 @@ this app is open source</string>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="5OA-tB-Exg">
                                         <rect key="frame" x="127" y="100" width="121" height="40.5"/>
-                                        <string key="text">breadwallet.com
+                                        <string key="text">groestlcoin.org
 </string>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -2229,8 +2229,7 @@ this app is open source</string>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="D4H-hd-LsX">
                                         <rect key="frame" x="85" y="141" width="205" height="35.5"/>
-                                        <string key="text">exchange rate data provided by
-bitpay.com/rates</string>
+                                        <string key="text">exchange rate data provided by Poloniex</string>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
