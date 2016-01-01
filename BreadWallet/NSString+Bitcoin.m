@@ -331,7 +331,7 @@ static const UniChar base58chars[] = {
         [self getBytes:d.mutableBytes maxLength:d.length usedLength:NULL encoding:NSUTF8StringEncoding options:0
          range:NSMakeRange(0, self.length) remainingRange:NULL];
         [d appendBytes:"?" length:1];
-        return (d.SHA256.u8[0] == 0) ? YES : NO;
+        return (d.HashGroestl_2.u8[0] == 0) ? YES : NO;
     }
     else return (self.hexToData.length == 32) ? YES : NO; // hex encoded key
 }

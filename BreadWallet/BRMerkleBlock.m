@@ -108,7 +108,7 @@
     [d appendUInt32:_timestamp];
     [d appendUInt32:_target];
     [d appendUInt32:_nonce];
-    _blockHash = d.SHA256_2;
+    _blockHash = d.HashGroestl_2;
 
     return self;
 }
@@ -321,7 +321,7 @@ totalTransactions:(uint32_t)totalTransactions hashes:(NSData *)hashes flags:(NSD
         nActualTimespan = nTargetTimespan*3;
 
     // Calculate the new difficulty based on actual and target timespan.
-    darkTarget *= nActualTimespan / nTargetTimespan; 
+    darkTarget *= nActualTimespan / nTargetTimespan;
 
     // If calculated difficulty is lower than the minimal diff, set the new difficulty to be the minimal diff.
     if (darkTarget > MAX_PROOF_OF_WORK){
