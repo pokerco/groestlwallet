@@ -1,24 +1,24 @@
-![ƀ](/images/icon.png) Groestlwallet
+![ƀ](/images/icon.png) Pokerwallet
 ----------------------------------
 
-**Groestlcoin done right**
+**PokerCo**
 
-The simplest and most secure groestlcoin wallet on any platform
+The simplest and most secure pokercoin wallet on any platform
 
 ![screenshot1](/images/screenshot1.jpg)
 
 **The first standalone iOS groestlcoin wallet:**
 
-Groestlwallet is a real standalone groestlcoin client. There is no server to get hacked or go down, so you can always access your money.
-Using [SPV](https://en.bitcoin.it/wiki/Thin_Client_Security#Header-Only_Clients) mode, Groestlwallet connects directly to the groestlcoin network with the fast performance you need on a mobile device.
+Pokerwallet is a real standalone pokercoin client. There is no server to get hacked or go down, so you can always access your money.
+Using [SPV](https://en.bitcoin.it/wiki/Thin_Client_Security#Header-Only_Clients) mode, pokerwallet connects directly to the pokercoin network with the fast performance you need on a mobile device.
 
 **The next step in wallet security:**
 
-Groestlwallet is designed to protect you from malware, browser security holes, *even physical theft*. With AES hardware encryption, app sandboxing, keychain and code signatures, groestlwallet represents a significant security advance over web and desktop wallets, and other mobile platforms.
+Pokerwallet is designed to protect you from malware, browser security holes, *even physical theft*. With AES hardware encryption, app sandboxing, keychain and code signatures, Pokerwallet represents a significant security advance over web and desktop wallets, and other mobile platforms.
 
 **beautiful simplicity:**
 
-Simplicity is groestlwallet's core design principle. A simple backup phrase is all you need to restore your wallet on another device if yours is ever lost or broken.  Because groestlwallet is [deterministic](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki), your balance and transaction history can be recovered from just your backup phrase.
+Simplicity is Pokerwallet's core design principle. A simple backup phrase is all you need to restore your wallet on another device if yours is ever lost or broken.  Because Pokerwallet is [deterministic](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki), your balance and transaction history can be recovered from just your backup phrase.
 
 ![screenshot2](/images/screenshot2.jpg)
 
